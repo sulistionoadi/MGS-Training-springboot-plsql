@@ -13,20 +13,20 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mgs.training.javaoracle.pelatihanapi.dto.CustomerDTO;
 import mgs.training.javaoracle.pelatihanapi.dto.CustomerMapper;
 import mgs.training.javaoracle.pelatihanapi.service.CustomerService;
 import oracle.jdbc.OracleTypes;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 	
 	private final DataSource datasource;
 	
-	public CustomerServiceImpl(DataSource datasource) {
-		this.datasource = datasource;
-	}
-
 	@Override
 	public void getData(String filter, Pageable page) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(datasource)
@@ -42,16 +42,16 @@ public class CustomerServiceImpl implements CustomerService {
 				.addValue("p_in_phonenumber", filter);
 		
 		Map<String, Object> result = jdbcCall.execute(inParam);
-		System.out.print("Executing procedure P_CUSTOMER.get_data get result ");
-		System.out.print(" Code = " + result.get("p_out_errcode"));
-		System.out.println(" Mesg = " + result.get("p_out_errmsg"));
+		log.info("Executing procedure P_CUSTOMER.get_data get result ");
+		log.info(" Code = " + result.get("p_out_errcode"));
+		log.info(" Mesg = " + result.get("p_out_errmsg"));
 		
 		List<CustomerDTO> data = null;
 		if((Integer) result.get("p_out_errcode") == 0) {
 			data = (List<CustomerDTO>) result.get("p_out_data");
-			System.out.println("Result Data Customer: ");
+			log.info("Result Data Customer: ");
 			data.stream().forEach(x -> {
-				System.out.println("-> " + x.toString());
+				log.info("-> " + x.toString());
 			});
 		}
 		
