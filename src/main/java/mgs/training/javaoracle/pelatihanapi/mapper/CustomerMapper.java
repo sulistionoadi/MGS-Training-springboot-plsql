@@ -1,9 +1,11 @@
-package mgs.training.javaoracle.pelatihanapi.dto;
+package mgs.training.javaoracle.pelatihanapi.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
+
+import mgs.training.javaoracle.pelatihanapi.dto.CustomerDTO;
 
 public class CustomerMapper implements RowMapper<CustomerDTO> {
 

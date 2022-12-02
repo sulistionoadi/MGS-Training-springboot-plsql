@@ -1,9 +1,11 @@
 package mgs.training.javaoracle.pelatihanapi.service;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import mgs.training.javaoracle.pelatihanapi.dto.CustomerDTO;
+import mgs.training.javaoracle.pelatihanapi.dto.http.HttpRespModel;
 
 public interface CustomerService {
 
-	public void getData(String filter, Pageable page);
+	public HttpRespModel getData(String filter, Integer pageNumber, Integer pageSize);
+	public HttpRespModel saveOrUpdate(CustomerDTO dto);
 	
 }
