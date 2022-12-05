@@ -1,7 +1,9 @@
 package mgs.training.javaoracle.pelatihanapi.controller;
 
+import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +37,20 @@ public class TransactionController {
 			@RequestParam(value = "page", defaultValue = "0") Integer page, 
 			@RequestParam(value = "size", defaultValue = "10") Integer size) {
 		return service.getData(nama, startDate, endDate, page, size);
+	}
+	
+	@GetMapping("/export/transaction")
+	public void exportTransaction(
+			@RequestParam(required = false) String nama,
+			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date startDate,
+			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date endDate,
+			HttpServletResponse response) throws IOException {
+		response.setContentType("text/csv");
+		response.addHeader("Content-Disposition","attachment; filename=\"data.csv\"");
+		service.exportCsv(nama, startDate, endDate, response.getWriter());
+		
+		response.getWriter().flush();
+		response.getWriter().close();
 	}
 	
 }
